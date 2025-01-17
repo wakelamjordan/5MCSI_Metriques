@@ -15,7 +15,7 @@ def hello_world():
 
 @app.route("/contact/")
 def contact():
-    return "<h2>Ma page contact</h2>"
+    return render_template("contact.html")
 
 
 @app.route("/tawarano/")
