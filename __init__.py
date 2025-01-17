@@ -18,7 +18,7 @@ def contact():
     return "<h2>Ma page contact</h2>"
 
 
-@app.route("/tawano/")
+@app.route("/tawarano/")
 def meteo():
     response = urlopen(
         "https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx"
