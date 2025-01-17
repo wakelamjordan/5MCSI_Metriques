@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <script type="text/javascript">
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawBackgroundColor)
+        function drawBackgroundColor() {
+            function drawChart(data) {
+                console.log(data)
+
+                // Convertir les données récupérées en un tableau utilisable par Google Charts
+                // dataTable.addColumn('number', 'Temperature');
+                // dataTable.addColumn('string', 'Jour');
+
+                let array = [["nombre de commit"]]
+                for (i = 0; i < data.length; i++) {
+                    var date = new Date(data[i].Jour * 1000);
+                    array.push([data[i].date])
+                }
+
+                var dataTable = new google.visualization.arrayToDataTable(array);
+
+
+                var options = {
+                    title: 'nombre de commit',
+                    legend: { position: 'none' },
+                    hAxis: {
+                        title: 'commit', // Titre de l'axe horizontal
+                        minValue: 8,      // Valeur minimale
+                        maxValue: 10      // Valeur maximale (ajustez selon vos données)
+                    },
+                    vAxis: {
+                        title: 'Nombre de jours',  // Titre de l'axe vertical
+                        minValue: 0,       // Valeur minimale
+                        maxValue: 11       // Valeur maximale (ajustez selon vos données)
+                    }
+                };
+
+                var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+                chart.draw(dataTable, options);
+            }
+            // Récupération de données depuis notre API /tawarano/
+            // fetch('/tawarano/')
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         drawChart(data);
+            //     })
+            fetch('/commits/')
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data.results)
+                    drawChart(data.results);
+                })
+        }
+    </script>
+</body>
+
+</html>

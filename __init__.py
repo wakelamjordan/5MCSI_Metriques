@@ -50,5 +50,42 @@ def monHistogramme():
     return render_template("histogramme.html")
 
 
+@app.route('/extract-minutes/<date_string>')
+def extract_minutes(date_string):
+    date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+    minutes = date_object.minute
+    return jsonify({'minutes': minutes})
+
+
+@app.route("/commits/")
+def commit():
+    response = urlopen(
+        "https://api.github.com/repos/wakelamjordan/5MCSI_Metriques/commits")
+
+    raw_content = response.read()
+
+    json_content = json.loads(raw_content.decode("utf-8"))
+
+    results = []
+
+    for list_element in json_content:
+        value = list_element.get("commit", {}).get("author", {}).get("date")
+
+        # temp_day_value = list_element.get('main', {}).get(
+        #     'temp') - 273.15  # voir pourquoi çà permet de convertir en °c
+
+        date_object = datetime.strptime(value, '%Y-%m-%dT%H:%M:%SZ')
+        minutes = date_object.minute
+
+        results.append({'date': minutes})
+
+    return jsonify(results=results)
+
+
+@app.route("/graphique_commits/")
+def graphiqueCommit():
+    return render_template("commits.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
